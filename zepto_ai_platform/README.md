@@ -68,3 +68,8 @@ git merge --no-ff feature/zepto-capstone -m "Merge Zepto capstone feature"
 
 The three capstone modules are organized as separate folders:
 data_pipeline, analytics, and support_assistant.
+## Module Structure
+
+- `data_pipeline/` — web scraping, cleaning, SQLite storage, and SQL analysis.
+- `analytics/` — Titanic EDA, classification, and regression analysis.
+- `support_assistant/` — document retrieval and support-question answering.
