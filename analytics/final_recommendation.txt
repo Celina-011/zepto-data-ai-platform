@@ -1,0 +1,4 @@
+FINAL MODEL RECOMMENDATION
+================================================================================
+
+For the classification task, Random Forest achieved the highest F1 score among the evaluated models (0.758). Its accuracy was 0.820 and ROC-AUC was 0.818. The Random Forest GridSearch selected parameters {'model__max_depth': 5, 'model__max_features': 'sqrt', 'model__n_estimators': 200}, with a cross-validation F1 score of 0.741 and an OOB score of 0.821. For the fare regression side-task, Linear Regression achieved MAE=20.670, RMSE=42.442, R²=0.325, and Adjusted R²=0.305. The residual spread changes substantially across prediction ranges, suggesting possible heteroscedasticity.

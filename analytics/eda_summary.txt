@@ -1,0 +1,7 @@
+MISSING-VALUE DECISIONS
+================================================================================
+
+age: 19.87% missing -> median imputation using 28.0000.
+embarked: 0.22% missing -> dropped affected rows because missingness is below 5%.
+deck: 77.22% missing -> encoded missing values as the explicit category 'missing' because missingness exceeds 30%.
+embark_town: 0.22% missing -> dropped affected rows because missingness is below 5%.

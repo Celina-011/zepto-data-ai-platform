@@ -1,0 +1,244 @@
+
+================================================================================
+QUERY: select_where
+================================================================================
+SELECT title, price_inr
+            FROM books
+            WHERE price_inr > 1000;
+
+OUTPUT:
+                                                                                                                                                                          title  price_inr
+                                                                                                                                                           A Light in the Attic   5461.735
+                                                                                                                                                             Tipping the Velvet   5669.570
+                                                                                                                                                                     Soumission   5285.550
+                                                                                                                                                                  Sharp Objects   5045.010
+                                                                                                                                          Sapiens: A Brief History of Humankind   5721.265
+                                                                                                                                                                The Requiem Red   2389.575
+                                                                                                                             The Dirty Little Secrets of Getting Your Dream Job   3517.370
+                                                                                        The Coming Woman: A Novel Based on the Life of the Infamous Feminist, Victoria Woodhull   1891.615
+                                                                                 The Boys in the Boat: Nine Americans and Their Epic Quest for Gold at the 1936 Berlin Olympics   2384.300
+                                                                                                                                                                The Black Maria   5501.825
+                                                                                                                                 Starving Hearts (Triangular Trade Trilogy, #1)   1475.945
+                                                                                                                                                          Shakespeare's Sonnets   2179.630
+                                                                                                                                                                    Set Me Free   1842.030
+                                                                                                                        Scott Pilgrim's Precious Little Life (Scott Pilgrim #1)   5516.595
+                                                                                                                                                      Rip it Up and Start Again   3694.610
+                                                                                             Our Band Could Be Your Life: Scenes from the American Indie Underground, 1981-1991   6039.875
+                                                                                                                                                                           Olio   2519.340
+                                                                                                                          Mesaerion: The Best Science Fiction Stories 1800-1849   3965.745
+                                                                                                                                                   Libertarianism for Beginners   5415.315
+                                                                                                                                                        It's Only the Himalayas   4765.435
+                                                                                                                                                                    In Her Wake   1354.620
+                                                                                                                                                                How Music Works   3937.260
+Foolproof Preserving: A Guide to Small Batch Jams, Jellies, Pickles, Condiments, and More: A Foolproof Guide to Making Small Batch Jams, Jellies, Pickles, Condiments, and More   3219.860
+                                                                                                                                                     Chase Me (Paris Nights #2)   2665.985
+                                                                                                                                                                     Black Dust   3642.915
+                                                                                                                                                  Birdsong: A Story in Pictures   5764.520
+                                                                    America's Cradle of Quarterbacks: Western Pennsylvania's Football Factory from Johnny Unitas to Joe Montana   2373.750
+                                                                                                                                                 Aladdin and His Wonderful Lamp   5605.215
+                                                                                                                        Worlds Elsewhere: Journeys Around Shakespeareâs Globe   4251.650
+                                                                                                                                                                 Wall and Piece   4660.990
+                                                                                                                     The Four Agreements: A Practical Guide to Personal Freedom   1863.130
+                                                                                                      The Five Love Languages: How to Express Heartfelt Commitment to Your Mate   3275.775
+                                                                                                                                                              The Elephant Tree   2513.010
+                                                                                                                                                         The Bear and the Piano   3891.895
+                                                                                                                                                                 Sophie's World   1681.670
+                                                                                                                                                                    Penny Maybe   3512.095
+                                                                                                                                 Maude (1883-1993):She Grew Up with the country   1901.110
+                                                                                                                                                           In a Dark, Dark Wood   2070.965
+                                                                                                                                                            Behind Closed Doors   5509.210
+                                                                                                                                                 You can't bury them all: Poems   3547.965
+                                                                                                                                                 Slow States of Collapse: Poems   6046.205
+                                                                                                                                                          Reasons to Stay Alive   2786.255
+                                                                                                                                                    Private Paris (Private #10)   5022.855
+                                                                                                             #HigherSelfie: Wake Up Your Life. Free Your Soul. Find Your Tribe.   2438.105
+                                                                                                                                                Without Borders (Wanderlove #1)   4754.885
+                                                                                                                                                               When We Collided   3351.735
+                                                                                                                                                   We Love You, Charlie Freeman   5303.485
+                                                                                                                                        Untitled Collection: Sabbath Poems 2014   1505.485
+                                                                      Unseen City: The Majesty of Pigeons, the Discreet Charm of Snails & Other Wonders of the Urban Wilderness   4660.990
+                                                                                                                                                                 Unicorn Tracks   1981.290
+                                                                         Unbound: How Eight Technologies Made Us Human, Transformed Society, and Brought Our World to the Brink   2692.360
+                                                                                                                        Tsubasa: WoRLD CHRoNiCLE 2 (Tsubasa WoRLD CHRoNiCLE #2)   1717.540
+                                                                                                    Throwing Rocks at the Google Bus: How Growth Became the Enemy of Prosperity   3283.160
+                                                                                                                                                                This One Summer   2056.195
+                                                                                                                                                                         Thirst   1821.985
+                                                                                                                                    The Torch Is Passed: A Harding Family Story   2013.995
+                                                                                                                                                The Secret of Dreadwillow Carse   5921.715
+                                                The Pioneer Woman Cooks: Dinnertime: Comfort Classics, Freezer Food, 16-Minute Meals, and Other Delicious Ways to Solve Supper!   5951.255
+                                                                                                                                                            The Past Never Ends   5960.750
+                                                                                                                      The Natural History of Us (The Fine Art of Pretending #2)   4770.710
+                                                                                                                                       The Nameless City (The Nameless City #1)   4025.880
+                                                                                                                              The Murder That Never Was (Forensic Instincts #5)   5708.605
+                                                                                                                      The Most Perfect Thing: Inside (and Outside) a Bird's Egg   4532.280
+                         The Mindfulness and Acceptance Workbook for Anxiety: A Guide to Breaking Free from Anxiety, Phobias, and Worry Using Acceptance and Commitment Therapy   2520.395
+                                                                                         The Life-Changing Magic of Tidying Up: The Japanese Art of Decluttering and Organizing   1769.235
+                                                                                             The Inefficiency Assassin: Time Management Tactics for Working Smarter, Not Longer   2172.245
+                                                                                                                      The Gutsy Girl: Escapades for Your Life of Epic Adventure   3917.215
+                                                                                                                 The Electric Pencil: Drawings from Inside State Hospital No. 3   5914.330
+                                                                                                                                   The Death of Humanity: and the Case for Life   6130.605
+                                                                                    The Bulletproof Diet: Lose up to a Pound a Day, Reclaim Energy and Focus, Upgrade Your Life   5174.775
+                                                                                                                                                                 The Art Forger   4300.180
+                                                                                                    The Age of Genius: The Seventeenth Century and the Birth of the Modern Mind   2081.515
+                                                                                                            The Activist's Tao Te Ching: Ancient Advice for a Modern Revolution   3401.320
+                                                                                                 Spark Joy: An Illustrated Master Class on the Art of Organizing and Tidying Up   4413.065
+                                                                                                                                                                    Soul Reader   4175.690
+                                                                                                                                                                       Security   4140.875
+                                                                                                                                  Saga, Volume 6 (Saga (Collected Editions) #6)   2639.610
+                                                                                                                                  Saga, Volume 5 (Saga (Collected Editions) #5)   5384.720
+                                                                                                              Reskilling America: Learning to Labor in the Twenty-First Century   2092.065
+                                                                                                            Rat Queens, Vol. 3: Demons (Rat Queens (Collected Editions) #11-15)   5317.200
+                                                                                              Princess Jellyfish 2-in-1 Omnibus, Vol. 01 (Princess Jellyfish 2-in-1 Omnibus #1)   1435.855
+                                                                                                                               Princess Between Worlds (Wide-Awake Princess #5)   1407.370
+                                                                                                                                                    Pop Gun War, Volume 1: Gift   2001.335
+            Political Suicide: Missteps, Peccadilloes, Bad Calls, Backroom Hijinx, Sordid Pasts, Rotten Breaks, and Just Plain Dumb Mistakes in the Annals of American Politics   3827.540
+                                                                                                                                                                       Patience   1071.880
+                                                                                                                         Outcast, Vol. 1: A Darkness Surrounds Him (Outcast #1)   1628.920
+                                                                                                         orange: The Complete Collection 1 (orange: The Complete Collection #1)   5107.255
+                                                                                                                        Online Marketing for Busy Authors: A Step-By-Step Guide   4889.925
+                                                                                                                                                            On a Midnight Clear   1484.385
+                                                                                                                                                              Obsidian (Lux #1)   1567.730
+                                                                                                                                          My Paris Kitchen: Recipes and Stories   3520.535
+                                                                                                                                                              Masks and Shadows   5950.200
+                                                                                            Mama Tried: Traditional Italian Cooking for the Screwed, Crude, Vegan, and Tattooed   1479.110
+                                                                                                                  Lumberjanes, Vol. 2: Friendship to the Max (Lumberjanes #5-8)   4949.005
+                                                                                                                 Lumberjanes, Vol. 1: Beware the Kitten Holy (Lumberjanes #1-4)   4811.855
+                                                                                                                        Lumberjanes Vol. 3: A Terrible Plan (Lumberjanes #9-12)   2101.560
+                                                                                                                       Layered: Baking, Building, and Styling Spectacular Cakes   4231.605
+                                                                                                          Judo: Seven Steps to Black Belt (an Introductory Guide for Beginners)   5686.450
+                                                                                                                                                                           Join   3763.185
+                                                                                                                                      In the Country We Love: My Family Divided   2321.000
+
+================================================================================
+QUERY: order_by
+================================================================================
+SELECT title, rating
+            FROM books
+            ORDER BY rating DESC, title
+            LIMIT 10;
+
+OUTPUT:
+                                                                            title  rating
+               #HigherSelfie: Wake Up Your Life. Free Your Soul. Find Your Tribe.       5
+                                                                       Black Dust       5
+                                                       Chase Me (Paris Nights #2)       5
+                                                                             Join       5
+                                 Princess Between Worlds (Wide-Awake Princess #5)       5
+Princess Jellyfish 2-in-1 Omnibus, Vol. 01 (Princess Jellyfish 2-in-1 Omnibus #1)       5
+                                                      Private Paris (Private #10)       5
+                                                        Rip it Up and Start Again       5
+                                            Sapiens: A Brief History of Humankind       5
+                          Scott Pilgrim's Precious Little Life (Scott Pilgrim #1)       5
+
+================================================================================
+QUERY: distinct
+================================================================================
+SELECT DISTINCT category_name
+            FROM categories
+            ORDER BY category_name;
+
+OUTPUT:
+     category_name
+     Add a comment
+               Art
+          Business
+         Childrens
+      Contemporary
+           Default
+           Fantasy
+           Fiction
+    Food and Drink
+            Health
+Historical Fiction
+           History
+            Horror
+             Music
+           Mystery
+         New Adult
+        Nonfiction
+        Philosophy
+            Poetry
+          Politics
+           Romance
+           Science
+   Science Fiction
+         Self Help
+    Sequential Art
+      Spirituality
+          Thriller
+            Travel
+       Young Adult
+
+================================================================================
+QUERY: between
+================================================================================
+SELECT title, price_gbp
+            FROM books
+            WHERE price_gbp BETWEEN 10 AND 30
+            ORDER BY price_gbp;
+
+OUTPUT:
+                                                                                                                                                 title  price_gbp
+                                                                                                                                              Patience      10.16
+                                                                                                                                           In Her Wake      12.84
+                                                                                                      Princess Between Worlds (Wide-Awake Princess #5)      13.34
+                                                                     Princess Jellyfish 2-in-1 Omnibus, Vol. 01 (Princess Jellyfish 2-in-1 Omnibus #1)      13.61
+                                                                                                        Starving Hearts (Triangular Trade Trilogy, #1)      13.99
+                                                                   Mama Tried: Traditional Italian Cooking for the Screwed, Crude, Vegan, and Tattooed      14.02
+                                                                                                                                   On a Midnight Clear      14.07
+                                                                                                               Untitled Collection: Sabbath Poems 2014      14.27
+                                                                                                                                     Obsidian (Lux #1)      14.86
+                                                                                                Outcast, Vol. 1: A Darkness Surrounds Him (Outcast #1)      15.44
+                                                                                                                                        Sophie's World      15.94
+                                                                                               Tsubasa: WoRLD CHRoNiCLE 2 (Tsubasa WoRLD CHRoNiCLE #2)      16.28
+                                                                The Life-Changing Magic of Tidying Up: The Japanese Art of Decluttering and Organizing      16.77
+                                                                                                                                                Thirst      17.27
+                                                                                                                                           Set Me Free      17.46
+                                                                                            The Four Agreements: A Practical Guide to Personal Freedom      17.66
+                                                               The Coming Woman: A Novel Based on the Life of the Infamous Feminist, Victoria Woodhull      17.93
+                                                                                                        Maude (1883-1993):She Grew Up with the country      18.02
+                                                                                                                                        Unicorn Tracks      18.78
+                                                                                                                           Pop Gun War, Volume 1: Gift      18.97
+                                                                                                           The Torch Is Passed: A Harding Family Story      19.09
+                                                                                                                                       This One Summer      19.49
+                                                                                                                                  In a Dark, Dark Wood      19.63
+                                                                           The Age of Genius: The Seventeenth Century and the Birth of the Modern Mind      19.73
+                                                                                     Reskilling America: Learning to Labor in the Twenty-First Century      19.83
+                                                                                               Lumberjanes Vol. 3: A Terrible Plan (Lumberjanes #9-12)      19.92
+                                                                    The Inefficiency Assassin: Time Management Tactics for Working Smarter, Not Longer      20.59
+                                                                                                                                 Shakespeare's Sonnets      20.66
+                                                                                                             In the Country We Love: My Family Divided      22.00
+                                           America's Cradle of Quarterbacks: Western Pennsylvania's Football Factory from Johnny Unitas to Joe Montana      22.50
+                                                        The Boys in the Boat: Nine Americans and Their Epic Quest for Gold at the 1936 Berlin Olympics      22.60
+                                                                                                                                       The Requiem Red      22.65
+                                                                                    #HigherSelfie: Wake Up Your Life. Free Your Soul. Find Your Tribe.      23.11
+                                                                                                                                     The Elephant Tree      23.82
+                                                                                                                                                  Olio      23.88
+The Mindfulness and Acceptance Workbook for Anxiety: A Guide to Breaking Free from Anxiety, Phobias, and Worry Using Acceptance and Commitment Therapy      23.89
+                                                                                                         Saga, Volume 6 (Saga (Collected Editions) #6)      25.02
+                                                                                                                            Chase Me (Paris Nights #2)      25.27
+                                                Unbound: How Eight Technologies Made Us Human, Transformed Society, and Brought Our World to the Brink      25.52
+                                                                                                                                 Reasons to Stay Alive      26.41
+
+================================================================================
+QUERY: join
+================================================================================
+SELECT b.title, b.rating, c.category_name
+            FROM books b
+            JOIN categories c
+                ON b.category_id = c.category_id
+            ORDER BY b.rating DESC, b.title
+            LIMIT 10;
+
+OUTPUT:
+                                                                            title  rating   category_name
+               #HigherSelfie: Wake Up Your Life. Free Your Soul. Find Your Tribe.       5      Nonfiction
+                                                                       Black Dust       5         Romance
+                                                       Chase Me (Paris Nights #2)       5         Romance
+                                                                             Join       5 Science Fiction
+                                 Princess Between Worlds (Wide-Awake Princess #5)       5         Fantasy
+Princess Jellyfish 2-in-1 Omnibus, Vol. 01 (Princess Jellyfish 2-in-1 Omnibus #1)       5  Sequential Art
+                                                      Private Paris (Private #10)       5         Fiction
+                                                        Rip it Up and Start Again       5           Music
+                                            Sapiens: A Brief History of Humankind       5         History
+                          Scott Pilgrim's Precious Little Life (Scott Pilgrim #1)       5  Sequential Art

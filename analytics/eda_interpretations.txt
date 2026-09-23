@@ -1,0 +1,46 @@
+MODULE 2 EDA INTERPRETATIONS
+================================================================================
+
+1. SURVIVAL RATE BY SEX AND CLASS
+--------------------------------------------------------------------------------
+Female passengers had a survival rate of 0.740, while male passengers had a survival rate of 0.189. Across the passenger classes, the survival rate generally varied substantially by both sex and class.
+The chart shows that passenger class and sex jointly provide useful information about survival outcomes. The differences are especially visible when comparing women and men within the same class.
+
+2. FARE DISTRIBUTION BY CLASS AND SURVIVAL
+--------------------------------------------------------------------------------
+Fare distributions differ across passenger classes, with higher classes generally associated with higher fares. The boxplot also shows substantial variation and several high-fare observations.
+Survival status creates additional differences within the fare distributions. This suggests that fare and passenger class contain related information about the survival outcome.
+
+3. AGE VS FARE BY SURVIVAL
+--------------------------------------------------------------------------------
+The scatterplot shows that passengers span a wide range of ages and fares, while survival observations occur throughout this space. Higher fares are concentrated among a smaller subset of passengers.
+The overlap between survived and non-survived observations indicates that age and fare alone do not perfectly separate the two outcomes. Their predictive usefulness therefore depends on their combination with other passenger characteristics.
+
+4. PASSENGER COUNTS BY CLASS AND SURVIVAL
+--------------------------------------------------------------------------------
+The passenger counts show that the three classes contain different numbers of passengers. The survival and non-survival counts also differ across classes.
+Class 3 contains many passengers and a large number of non-survivors, while the higher classes show different survival patterns. This makes pclass an important variable to retain during modeling.
+
+FARE DISTRIBUTION INTERPRETATION
+--------------------------------------------------------------------------------
+Fare mean = 32.0967
+Fare median = 14.4542
+Fare mode = 8.0500
+Fare skewness = 4.8014
+
+Fare is positively/right skewed, meaning a relatively small number of passengers paid substantially higher fares.
+
+IQR OUTLIER COUNTS
+--------------------------------------------------------------------------------
+Age IQR outliers: 65
+Fare IQR outliers: 114
+
+STRONGEST CORRELATIONS
+--------------------------------------------------------------------------------
+pclass vs fare: correlation = -0.5482
+sibsp vs parch: correlation = 0.4145
+
+EDA STANDARDIZATION CHECK
+--------------------------------------------------------------------------------
+age: mean=0.000000, std=1.000000
+fare: mean=0.000000, std=1.000000

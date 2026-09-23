@@ -54,24 +54,80 @@ def scrape_books(max_pages=5):
 
 
 def clean_books(df):
-    rating_map = {"One": 1, "Two": 2, "Three": 3, "Four": 4, "Five": 5}
+    rating_map = {
+        "One": 1,
+        "Two": 2,
+        "Three": 3,
+        "Four": 4,
+        "Five": 5,
+    }
 
     out = df.copy()
+
+    # Clean price and convert it to numeric.
     out["price_gbp"] = (
-        out["price"].astype(str).str.replace("£", "", regex=False).str.strip()
+        out["price"]
+        .astype(str)
+        .str.replace("£", "", regex=False)
+        .str.replace("Â", "", regex=False)
+        .str.strip()
     )
     out["price_gbp"] = pd.to_numeric(out["price_gbp"], errors="coerce")
-    out["rating"] = out["star_rating"].map(rating_map)
-    out["in_stock"] = out["availability"].str.contains("In stock", case=False, na=False)
 
-    # Numeric parsing failures are median-imputed as required.
-    out["price_gbp"] = out["price_gbp"].fillna(out["price_gbp"].median())
-    out["rating"] = out["rating"].fillna(out["rating"].median()).round().astype(int)
+    # Convert rating words to integers.
+    out["rating"] = out["star_rating"].map(rating_map)
+
+    # Convert availability text to Boolean.
+    out["in_stock"] = out["availability"].str.contains(
+        "In stock",
+        case=False,
+        na=False,
+    )
+
+    # Handle numeric parsing failures using median imputation.
+    price_median = out["price_gbp"].median()
+
+    if pd.isna(price_median):
+        raise ValueError(
+            "All price values failed to parse. Check the scraped price format."
+        )
+
+    out["price_gbp"] = out["price_gbp"].fillna(price_median)
+
+    rating_median = out["rating"].median()
+
+    if pd.isna(rating_median):
+        raise ValueError(
+            "All rating values failed to parse. Check the scraped rating format."
+        )
+
+    out["rating"] = (
+        out["rating"]
+        .fillna(rating_median)
+        .round()
+        .astype(int)
+    )
+
+    # Fixed project-defined conversion.
     out["price_inr"] = out["price_gbp"] * GBP_TO_INR
 
+    # Drop rows where required text fields are unavailable.
     out = out.dropna(subset=["title", "category"]).copy()
+
+    # Final safety check before SQLite insertion.
+    out = out.dropna(
+        subset=["price_gbp", "price_inr", "rating", "in_stock", "category"]
+    ).copy()
+
     return out[
-        ["title", "price_gbp", "price_inr", "rating", "in_stock", "category"]
+        [
+            "title",
+            "price_gbp",
+            "price_inr",
+            "rating",
+            "in_stock",
+            "category",
+        ]
     ]
 
 
@@ -123,25 +179,64 @@ def load_sqlite(df, db_path=DB_PATH):
 
 def run_queries(db_path=DB_PATH):
     queries = {
-        "select_where": "SELECT title, price_inr FROM books WHERE price_inr > 1000;",
-        "order_by": "SELECT title, rating FROM books ORDER BY rating DESC, title LIMIT 10;",
-        "distinct": "SELECT DISTINCT category_name FROM categories ORDER BY category_name;",
-        "between": "SELECT title, price_gbp FROM books WHERE price_gbp BETWEEN 10 AND 30 ORDER BY price_gbp;",
+        "select_where": """
+            SELECT title, price_inr
+            FROM books
+            WHERE price_inr > 1000;
+        """,
+        "order_by": """
+            SELECT title, rating
+            FROM books
+            ORDER BY rating DESC, title
+            LIMIT 10;
+        """,
+        "distinct": """
+            SELECT DISTINCT category_name
+            FROM categories
+            ORDER BY category_name;
+        """,
+        "between": """
+            SELECT title, price_gbp
+            FROM books
+            WHERE price_gbp BETWEEN 10 AND 30
+            ORDER BY price_gbp;
+        """,
         "join": """
             SELECT b.title, b.rating, c.category_name
             FROM books b
-            JOIN categories c ON b.category_id = c.category_id
+            JOIN categories c
+                ON b.category_id = c.category_id
             ORDER BY b.rating DESC, b.title
             LIMIT 10;
         """,
     }
 
+    output_path = Path(__file__).with_name("sql_results.txt")
+
     with sqlite3.connect(db_path) as conn:
         results = {}
-        for name, query in queries.items():
-            results[name] = pd.read_sql(query, conn)
-            print(f"\n--- {name} ---\n{results[name].to_string(index=False)}")
-        return results
+
+        with open(output_path, "w", encoding="utf-8") as file:
+            for name, query in queries.items():
+                result = pd.read_sql(query, conn)
+                results[name] = result
+
+                # Save query string.
+                file.write(f"\n{'=' * 80}\n")
+                file.write(f"QUERY: {name}\n")
+                file.write(f"{'=' * 80}\n")
+                file.write(query.strip())
+                file.write("\n\nOUTPUT:\n")
+                file.write(result.to_string(index=False))
+                file.write("\n")
+
+                # Still display the result in the terminal.
+                print(f"\n--- {name} ---")
+                print(result.to_string(index=False))
+
+    print(f"\nSQL queries and outputs saved to: {output_path}")
+
+    return results
 
 
 def main():
@@ -157,16 +252,29 @@ def main():
     # Reproduce the JOIN result with pandas.
     category_df = cleaned[["category"]].drop_duplicates().reset_index(drop=True)
     category_df["category_id"] = category_df.index + 1
+
     books_for_merge = cleaned.copy()
     books_for_merge["category_id"] = books_for_merge["category"].map(
         dict(zip(category_df["category"], category_df["category_id"]))
     )
+
     pandas_join = (
-        books_for_merge.merge(category_df, on="category_id")
+        books_for_merge[
+            ["title", "rating", "category_id"]
+        ]
+        .merge(
+            category_df,
+            on="category_id",
+            how="inner",
+        )
         [["title", "rating", "category"]]
-        .sort_values(["rating", "title"], ascending=[False, True])
+        .sort_values(
+            ["rating", "title"],
+            ascending=[False, True],
+        )
         .head(10)
     )
+
     pandas_join.columns = ["title", "rating", "category_name"]
 
     print("\n--- SQL JOIN vs pandas.merge ---")
