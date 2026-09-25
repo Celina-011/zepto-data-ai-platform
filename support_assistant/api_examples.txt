@@ -1,0 +1,35 @@
+Example 1: Zepto policy question
+
+POST /ask
+
+Request:
+{
+  "query": "What is the return policy?"
+}
+
+Response:
+{
+  "answer": "Based on the retrieved context: items that have been opened are non-returnable except in the case of a manufacturing defect. Return pickup, where required, is arranged free of cost by Zepto.",
+  "sources": ["doc_02"],
+  "confidence": 1
+}
+
+Status: 200 OK
+
+Example 2: General question outside Zepto policies
+
+POST /ask
+
+Request:
+{
+  "query": "What is the capital of India?"
+}
+
+Response:
+{
+  "answer": "I can only answer questions about Zepto policies right now.",
+  "sources": [],
+  "confidence": 1
+}
+
+Status: 200 OK

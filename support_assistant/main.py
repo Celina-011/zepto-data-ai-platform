@@ -21,22 +21,60 @@ collection = client.get_or_create_collection(
 
 
 def ingest():
-    documents, ids = [], []
+    chunk_texts = []
+    chunk_ids = []
+    metadatas = []
+
+    chunk_size = 500
+    overlap = 100
+
     for filename in sorted(os.listdir(DOCS_DIR)):
         if not filename.endswith(".txt"):
             continue
+
         path = os.path.join(DOCS_DIR, filename)
+
         with open(path, "r", encoding="utf-8") as f:
             text = f.read().strip()
-        documents.append(text)
-        ids.append(filename.replace(".txt", ""))
 
-    embeddings = model.encode(documents, normalize_embeddings=True).tolist()
-    collection.upsert(ids=ids, documents=documents, embeddings=embeddings)
+        source_id = filename.replace(".txt", "")
 
+        # Split the document into overlapping chunks
+        start = 0
+        chunk_number = 0
 
+        while start < len(text):
+            end = start + chunk_size
+            chunk = text[start:end].strip()
+
+            if chunk:
+                chunk_texts.append(chunk)
+                chunk_ids.append(
+                    f"{source_id}_chunk_{chunk_number}"
+                )
+                metadatas.append({"source": source_id})
+                chunk_number += 1
+
+            start += chunk_size - overlap
+
+    if not chunk_texts:
+        print("No policy documents found.")
+        return
+
+    embeddings = model.encode(
+        chunk_texts,
+        normalize_embeddings=True
+    ).tolist()
+
+    collection.upsert(
+        ids=chunk_ids,
+        documents=chunk_texts,
+        embeddings=embeddings,
+        metadatas=metadatas
+    )
+
+    print(f"Ingested {len(chunk_texts)} policy chunks.")
 ingest()
-
 
 class Answer(BaseModel):
     answer: str
@@ -65,26 +103,47 @@ def classify_intent(state: State):
     intent = "policy_question" if any(k in query for k in KEYWORDS) else "general_question"
     return {"intent": intent}
 
-
 def retrieve_and_answer(state: State):
     query = state["query"]
-    q_embedding = model.encode([query], normalize_embeddings=True).tolist()
-    result = collection.query(query_embeddings=q_embedding, n_results=3)
+
+    q_embedding = model.encode(
+        [query],
+        normalize_embeddings=True
+    ).tolist()
+
+    result = collection.query(
+        query_embeddings=q_embedding,
+        n_results=3
+    )
 
     docs = result["documents"][0]
-    ids = result["ids"][0]
+    metadatas = result["metadatas"][0]
+    chunk_ids = result["ids"][0]
+
+    # Get the original document names safely
+    sources = []
+
+    for metadata, chunk_id in zip(metadatas, chunk_ids):
+        if metadata is not None and metadata.get("source"):
+            source = metadata["source"]
+        else:
+            source = chunk_id.split("_chunk_")[0]
+
+        if source not in sources:
+            sources.append(source)
 
     top = docs[0]
-    if MOCK_LLM:
-        answer = f"Based on the retrieved context: {top[:200]}"
-        return {"answer": Answer(answer=answer, sources=ids, confidence=1.0)}
 
-    # Optional real-LLM branch can be added here without affecting graded mock mode.
-    return {"answer": Answer(
-        answer=f"Based on the retrieved context: {top[:200]}",
-        sources=ids,
-        confidence=1.0,
-    )}
+    answer = f"Based on the retrieved context: {top}"
+
+    return {
+        "answer": Answer(
+            answer=answer,
+            sources=sources,
+            confidence=1.0
+        )
+    }
+
 
 
 def direct_answer(state: State):
