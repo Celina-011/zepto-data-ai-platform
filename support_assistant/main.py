@@ -7,11 +7,19 @@ from fastapi import FastAPI
 from pydantic import BaseModel, Field
 from sentence_transformers import SentenceTransformer
 from langgraph.graph import StateGraph, END
+from openai import OpenAI
 
 
 DOCS_DIR = os.path.join(os.path.dirname(__file__), "docs")
 MOCK_LLM = os.getenv("MOCK_LLM", "1") != "0"
+OPENAI_MODEL = os.getenv("OPENAI_MODEL", "gpt-4o-mini")
 
+client = None
+
+if not MOCK_LLM:
+    client = OpenAI(
+        api_key=os.getenv("OPENAI_API_KEY")
+    )
 model = SentenceTransformer("all-MiniLM-L6-v2")
 client = chromadb.PersistentClient(path=os.path.join(os.path.dirname(__file__), "chroma_db"))
 collection = client.get_or_create_collection(
@@ -103,14 +111,57 @@ def classify_intent(state: State):
     intent = "policy_question" if any(k in query for k in KEYWORDS) else "general_question"
     return {"intent": intent}
 
+def generate_llm_answer(prompt: str) -> str:
+    if client is None:
+        raise RuntimeError("OpenAI client is not configured.")
+
+    last_error = None
+
+    for attempt in range(3):
+        try:
+            response = client.chat.completions.create(
+                model=OPENAI_MODEL,
+                messages=[
+                    {
+                        "role": "system",
+                        "content": (
+                            "You are a Zepto customer support assistant. "
+                            "Answer only from the supplied policy context. "
+                            "Never invent policies or use outside knowledge."
+                        )
+                    },
+                    {
+                        "role": "user",
+                        "content": prompt
+                    }
+                ],
+                temperature=0
+            )
+
+            answer = response.choices[0].message.content
+
+            if not answer or not answer.strip():
+                raise ValueError("The model returned an empty answer.")
+
+            return answer.strip()
+
+        except Exception as exc:
+            last_error = exc
+
+    raise RuntimeError(
+        f"LLM failed after 3 attempts: {last_error}"
+    )
+
 def retrieve_and_answer(state: State):
     query = state["query"]
 
+    # Step 1: Create query embedding
     q_embedding = model.encode(
         [query],
         normalize_embeddings=True
     ).tolist()
 
+    # Step 2: Retrieve relevant policy chunks
     result = collection.query(
         query_embeddings=q_embedding,
         n_results=3
@@ -120,11 +171,23 @@ def retrieve_and_answer(state: State):
     metadatas = result["metadatas"][0]
     chunk_ids = result["ids"][0]
 
-    # Get the original document names safely
+    if not docs:
+        return {
+            "answer": Answer(
+                answer=(
+                    "I could not find relevant information "
+                    "in the available Zepto policies."
+                ),
+                sources=[],
+                confidence=0.0
+            )
+        }
+
+    # Step 3: Identify source documents
     sources = []
 
     for metadata, chunk_id in zip(metadatas, chunk_ids):
-        if metadata is not None and metadata.get("source"):
+        if metadata and metadata.get("source"):
             source = metadata["source"]
         else:
             source = chunk_id.split("_chunk_")[0]
@@ -132,19 +195,72 @@ def retrieve_and_answer(state: State):
         if source not in sources:
             sources.append(source)
 
-    top = docs[0]
+    # Step 4: Combine retrieved context
+    context = "\n\n".join(docs)
 
-    answer = f"Based on the retrieved context: {top}"
+    # Step 5: Structured prompt
+    prompt = f"""
+ROLE:
+You are a helpful Zepto customer support assistant.
+
+CONTEXT:
+Use only the following retrieved Zepto policy information:
+
+{context}
+
+TASK:
+Answer the user's question using the policy context.
+
+If the answer is not available in the context,
+clearly say that the available policies do not
+provide the information.
+
+Do not invent policies, prices, guarantees,
+or exceptions. Do not use outside knowledge.
+
+FEW-SHOT EXAMPLE:
+
+User question:
+Can I return an opened item?
+
+Retrieved policy:
+Opened items are non-returnable except in the
+case of a manufacturing defect.
+
+Expected answer:
+Opened items are non-returnable except in the
+case of a manufacturing defect.
+
+FORMAT:
+Return a clear, concise, customer-friendly answer.
+
+LENGTH:
+Use no more than 3 sentences.
+
+USER QUESTION:
+{query}
+"""
+
+    # Step 6: Generate answer
+    if MOCK_LLM:
+        # Deterministic mode; no external API call
+        answer_text = (
+            f"Based on the retrieved context: {docs[0]}"
+        )
+    else:
+        # Real OpenAI mode
+        answer_text = generate_llm_answer(prompt)
+
+    # Step 7: Validate response using Pydantic
+    validated_answer = Answer(
+        answer=answer_text,
+        sources=sources,
+        confidence=0.75
+    )
 
     return {
-        "answer": Answer(
-            answer=answer,
-            sources=sources,
-            confidence=1.0
-        )
+        "answer": validated_answer
     }
-
-
 
 def direct_answer(state: State):
     return {"answer": Answer(

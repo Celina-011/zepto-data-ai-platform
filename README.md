@@ -80,6 +80,29 @@ From the `support_assistant` directory, build and run the application:
 ```bash
 docker build -t zepto-support-assistant .
 docker run -p 7860:7860 zepto-support-assistant
+
+### LLM Configuration
+
+The Support Assistant supports two modes:
+
+1. **Mock mode (default):** Uses deterministic responses based on retrieved policy context. No external API key is required.
+2. **OpenAI mode (optional):** Uses the OpenAI API to generate responses from retrieved policy context.
+
+To enable OpenAI mode, set these environment variables:
+
+- `MOCK_LLM=0`
+- `OPENAI_API_KEY=<your-api-key>`
+- `OPENAI_MODEL=gpt-4o-mini`
+
+Never commit API keys to the repository.
+
+Mock mode can be used for local demonstrations without API costs.
+
+### Current Limitations
+
+- Mock mode returns retrieved policy text and does not call an LLM.
+- The confidence score is currently a placeholder, not a calibrated retrieval or model confidence.
+- Real OpenAI API mode requires an API key and available API credits. It has not been tested as part of this local demonstration.
 ## Git workflow
 
 Create a feature branch, make at least two commits on it, then merge it into `main`:
